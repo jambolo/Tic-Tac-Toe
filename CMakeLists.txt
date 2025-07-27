@@ -21,8 +21,11 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
+# Option to build tests
+option(BUILD_TESTING "Build tests" ON)
+
 # External dependencies
-#find_package(nlohmann_json REQUIRED)
+find_package(nlohmann_json REQUIRED)
 
 if(WIN32)
     add_compile_definitions(
@@ -41,9 +44,12 @@ set(SOURCES
 
 # Create the main executable
 add_executable(Tic-Tac-Toe ${SOURCES})
-target_include_directories(Tic-Tac-Toe PRIVATE .)
+target_include_directories(Tic-Tac-Toe PRIVATE . GamePlayer/include)
+
 target_link_libraries(Tic-Tac-Toe PRIVATE
-#    nlohmann_json::nlohmann_json
+    GamePlayer
+    TicTacToe
+    nlohmann_json::nlohmann_json
 )
 
 # Source grouping for IDEs
@@ -64,4 +70,6 @@ endif()
 #########################################################################
 # Libraries                                                             #
 #########################################################################
+add_subdirectory(GamePlayer)
+add_subdirectory(TicTacToe)
 
