@@ -2,6 +2,8 @@
 #include "TicTacToe/HumanPlayer.h"
 #include "TicTacToe/ComputerPlayer.h"
 
+#include <CLI/CLI.hpp>
+
 #include <cassert>
 #include <iostream>
 
@@ -11,15 +13,39 @@ static void displayBoard(TicTacToeState const & state);
 
 int main(int argc, char* argv[])
 {
+    bool humanGoesFirst = true;     // Human player goes first by default
+
+    {
+        CLI::App cli;
+        bool first = false;
+        bool second = false;
+
+        auto * order = cli.add_option_group("Order of play", "Choose who goes first");
+        order->add_flag("--first, -f", first, "You go first. (default)");
+        order->add_flag("--second, -s", second, "The computer goes first.");
+        order->require_option(0, 1);
+
+        CLI11_PARSE(cli, argc, argv);
+
+        if (first)
+        {
+            humanGoesFirst = true;
+        }
+        else if (second)
+        {
+            humanGoesFirst = false;
+        }
+    }
+
     TicTacToeState state;
-    ComputerPlayer computer(GameState::PlayerId::FIRST);
-    HumanPlayer human(GameState::PlayerId::SECOND);
+    HumanPlayer human(humanGoesFirst? GameState::PlayerId::FIRST : GameState::PlayerId::SECOND);
+    ComputerPlayer computer(humanGoesFirst ? GameState::PlayerId::SECOND : GameState::PlayerId::FIRST);
 
     while (!state.isDone())
     {
         displayBoard(state);
 
-        if (state.whoseTurn() == TicTacToeState::PlayerId::FIRST)
+        if (state.whoseTurn() == computer.playerId())
         {
             // Computer player's turn
             std::cout << "Computer's turn...\n";
@@ -41,13 +67,11 @@ int main(int argc, char* argv[])
     }
     else
     {
-        Board::Cell winner = state.winner();
-        if (winner == Board::Cell::X)
-            std::cout << "Player X wins!" << std::endl;
-        else if (winner == Board::Cell::O)
-            std::cout << "Player O wins!" << std::endl;
+        GamePlayer::GameState::PlayerId winner = TicTacToeState::toPlayerId(state.winner()).value();
+        if (winner == human.playerId())
+            std::cout << "You win!" << std::endl;
         else
-            assert(false && "The game is not a draw, but there is no winner.");
+            std::cout << "The computer wins!" << std::endl;
     }
 
     return 0;
@@ -63,13 +87,10 @@ static void displayBoard(TicTacToeState const& state)
         for (int col = 0; col < 3; ++col)
         {
             Board::Cell cell = state.board().at(row, col);
-            char cellChar;
+            char cellChar = '.';
 
             switch (cell)
             {
-            case Board::Cell::NEITHER:
-                cellChar = '.';
-                break;
             case Board::Cell::X:
                 cellChar = 'X';
                 break;

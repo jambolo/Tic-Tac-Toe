@@ -26,6 +26,7 @@ option(BUILD_TESTING "Build tests" ON)
 
 # External dependencies
 find_package(nlohmann_json REQUIRED)
+find_package(CLI11 REQUIRED)
 
 if(WIN32)
     add_compile_definitions(
@@ -49,6 +50,7 @@ target_include_directories(Tic-Tac-Toe PRIVATE . GamePlayer/include)
 target_link_libraries(Tic-Tac-Toe PRIVATE
     GamePlayer
     TicTacToe
+    CLI11::CLI11
     nlohmann_json::nlohmann_json
 )
 
