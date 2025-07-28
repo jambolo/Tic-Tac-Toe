@@ -16,13 +16,8 @@ HumanPlayer::HumanPlayer(GamePlayer::GameState::PlayerId playerId)
 
 void HumanPlayer::move(TicTacToeState * pState)
 {
-    // Display the current board state
-    std::cout << "\nCurrent board state:\n";
-    displayBoard(*pState);
-    
     // Determine the player's symbol
     char playerSymbol = (TicTacToeState::toCell(playerId_) == Board::Cell::X) ? 'X' : 'O';
-    std::cout << "\nPlayer " << playerSymbol << ", it's your turn!\n";
     
     // Get valid move from user
     int row, col;
@@ -58,42 +53,8 @@ void HumanPlayer::move(TicTacToeState * pState)
         }
     }
     
-    // Create a new state with the move applied
+    // Apply the move to the game state
     pState->move(row, col);
-    
-    std::cout << "You chose position (" << row << ", " << col << ")\n";
-}
-
-void HumanPlayer::displayBoard(TicTacToeState const & state) const
-{
-    std::cout << "   0   1   2\n";
-    for (int row = 0; row < 3; ++row)
-    {
-        std::cout << row << " ";
-        for (int col = 0; col < 3; ++col)
-        {
-            Board::Cell cell = state.board().at(row, col);
-            char cellChar;
-            
-            switch (cell)
-            {
-                case Board::Cell::NEITHER:
-                    cellChar = '.';
-                    break;
-                case Board::Cell::X:
-                    cellChar = 'X';
-                    break;
-                case Board::Cell::O:
-                    cellChar = 'O';
-                    break;
-            }
-            
-            std::cout << " " << cellChar << " ";
-            if (col < 2) std::cout << "|";
-        }
-        std::cout << "\n";
-        if (row < 2) std::cout << "  ---|---|---\n";
-    }
 }
 
 bool HumanPlayer::isValidMove(TicTacToeState const & state, int row, int col) const

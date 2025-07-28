@@ -9,6 +9,7 @@
 #include "GamePlayer/TranspositionTable.h"
 
 #include <cassert>
+#include <ctime>
 #include <vector>
 #include <functional>
 
@@ -24,6 +25,8 @@ ComputerPlayer::ComputerPlayer(GamePlayer::GameState::PlayerId playerId)
                                          staticEvaluator_,
                                          std::bind(&ComputerPlayer::responseGenerator, this, std::placeholders::_1, std::placeholders::_2),
                                          MAX_DEPTH);
+    // Initialize the random number generator
+    srand(static_cast<unsigned int>(time(nullptr)));
 }
 
 void ComputerPlayer::move(TicTacToeState * pState)
@@ -45,7 +48,7 @@ void ComputerPlayer::move(TicTacToeState * pState)
     assert(emptyCells.size() > 0);
 
     // Choose a random empty cell to mark
-        int randomIndex = rand() % emptyCells.size();
+    int randomIndex = rand() % emptyCells.size();
     auto [r, c] = Board::toPosition(emptyCells[randomIndex]);
     pState->move(r, c);
 }
