@@ -5,12 +5,12 @@
 #include <cstdint>
 
 // Zobrist Hashing Calculator.
-// 
+//
 // Zobrist Hashing is used to encode the state of a chess game in a single number. There is a risk of two unrelated states
 // having the same value. In this implementation, the value has 64 bits and the risk of collision can be assumed to be
 // very low, though not for a large number of values. The probability of at least one collision with 1 million values
 // is 2.710502×10<sup>-8</sup>, but with 1 billion values, it rises to 1 in 40.
-// 
+//
 // There are 6 components of state. This implementation of Zorbrist hashing incorporates most of them.
 //      1. board
 //      2. whose turn it is
@@ -37,10 +37,10 @@ public:
     }
 
     // Constructor
-    ZHash(Board const & board,
+    ZHash(Board const &                   board,
           GamePlayer::GameState::PlayerId currentPlayer,
-          bool done = false,
-          Board::Cell winner = Board::Cell::NEITHER);
+          bool                            done   = false,
+          Board::Cell                     winner = Board::Cell::NEITHER);
 
     // Returns the current value.
     Z value() const { return value_; }
@@ -60,8 +60,7 @@ public:
 private:
 
     friend bool operator ==(ZHash const & x, ZHash const & y);
-    friend bool operator <(ZHash const& x, ZHash const& y);
-
+    friend bool operator <(ZHash const & x, ZHash const & y);
 
     class ZValueTable; // declared below
 
@@ -76,13 +75,11 @@ inline bool operator ==(ZHash const & x, ZHash const & y)
     return x.value_ == y.value_;
 }
 
-
 // Less than operator
-inline bool operator <(ZHash const& x, ZHash const& y)
+inline bool operator <(ZHash const & x, ZHash const & y)
 {
     return x.value_ < y.value_;
 }
-
 
 class ZHash::ZValueTable
 {
@@ -91,9 +88,9 @@ public:
     ZValueTable();
 
     Z cellValue(Board::Cell cell, int row, int column) const { return cellValue(cell, Board::toIndex(row, column)); }
-    Z cellValue(Board::Cell cell, int index) const { return cellValues_[index][static_cast<int>(cell)]; }
-    Z turnValue() const { return turnValue_; }
-    Z winnerValue(Board::Cell winner) const { return winnerValues_[static_cast<int>(winner)]; }
+    Z cellValue(Board::Cell cell, int index) const           { return cellValues_[index][static_cast<int>(cell)]; }
+    Z turnValue() const                                      { return turnValue_; }
+    Z winnerValue(Board::Cell winner) const                  { return winnerValues_[static_cast<int>(winner)]; }
 
 private:
 

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 project(Tic-Tac-Toe 
-    VERSION 0.1.0 
+    VERSION 1.0.0 
     LANGUAGES CXX
 )
 
@@ -44,10 +44,10 @@ set(SOURCES
 )
 
 # Create the main executable
-add_executable(Tic-Tac-Toe ${SOURCES})
-target_include_directories(Tic-Tac-Toe PRIVATE . GamePlayer/include)
+add_executable(tictactoe ${SOURCES})
+target_include_directories(tictactoe PRIVATE . GamePlayer/include)
 
-target_link_libraries(Tic-Tac-Toe PRIVATE
+target_link_libraries(tictactoe PRIVATE
     GamePlayer
     TicTacToe
     CLI11::CLI11

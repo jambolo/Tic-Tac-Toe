@@ -25,4 +25,3 @@ std::pair<int, int> Board::toPosition(int index)
     assert(index >= 0 && index < 9);
     return std::make_pair(index / 3, index % 3);
 }
-

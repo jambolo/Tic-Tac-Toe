@@ -9,7 +9,7 @@ namespace GamePlayer
     class TranspositionTable;
 }
 
-class ComputerPlayer : public Player  
+class ComputerPlayer : public Player
 {
 public:
     // Constructor

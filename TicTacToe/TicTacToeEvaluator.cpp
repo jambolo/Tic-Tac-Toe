@@ -5,16 +5,15 @@
 #include "GamePlayer/GameState.h"
 
 #include <array>
-#include <vector>
 #include <cassert>
-
+#include <vector>
 
 typedef std::array<int, 3> Line;
 
 static Line allLines[] {
-    {0, 1, 2}, {3, 4, 5}, {6, 7, 8}, // Rows
-    {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, // Columns
-    {0, 4, 8}, {2, 4, 6}             // Diagonals
+    { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, // Rows
+    { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, // Columns
+    { 0, 4, 8 }, { 2, 4, 6 }               // Diagonals
 };
 
 float TicTacToeEvaluator::evaluate(GamePlayer::GameState const & state) const
@@ -43,7 +42,9 @@ float TicTacToeEvaluator::evaluate(GamePlayer::GameState const & state) const
 
     // If the game is a draw, return 0
     if (tttState.isDraw())
+    {
         return 0.0f;
+    }
 
     // Evaluate the score based on the current board state
 
@@ -53,7 +54,8 @@ float TicTacToeEvaluator::evaluate(GamePlayer::GameState const & state) const
     for (auto const & line : allLines)
     {
         int xCount = 0, oCount = 0, emptyCount = 0;
-        for (int idx : line) {
+        for (int idx : line)
+        {
             switch (board.at(idx))
             {
                 case Board::Cell::X: ++xCount; break;
@@ -82,7 +84,7 @@ float TicTacToeEvaluator::evaluate(GamePlayer::GameState const & state) const
     }
 
     // Check for corner bonuses
-    for (int corner : {0, 2, 6, 8})
+    for (int corner : { 0, 2, 6, 8 })
     {
         if (board.at(corner) == Board::Cell::X)
         {

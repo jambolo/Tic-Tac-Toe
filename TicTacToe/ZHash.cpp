@@ -9,7 +9,6 @@
 
 ZHash::ZValueTable const ZHash::zValueTable_;
 
-
 ZHash::ZHash(Board const & board, GamePlayer::GameState::PlayerId currentPlayer, bool over, Board::Cell winner)
     : value_(ZHash::EMPTY)
 {
@@ -58,8 +57,8 @@ ZHash::ZValueTable::ZValueTable()
     for (int i = 0; i < 9; ++i)
     {
         cellValues_[i][static_cast<int>(Board::Cell::NEITHER)] = 0;     // Empty cells don't contribute to the hash
-        cellValues_[i][static_cast<int>(Board::Cell::X)] = rng();
-        cellValues_[i][static_cast<int>(Board::Cell::O)] = rng();
+        cellValues_[i][static_cast<int>(Board::Cell::X)]       = rng();
+        cellValues_[i][static_cast<int>(Board::Cell::O)]       = rng();
     }
 
     // Generate turn value
@@ -67,6 +66,6 @@ ZHash::ZValueTable::ZValueTable()
 
     // Generate winner values
     winnerValues_[static_cast<int>(Board::Cell::NEITHER)] = rng();
-    winnerValues_[static_cast<int>(Board::Cell::X)] = rng();
-    winnerValues_[static_cast<int>(Board::Cell::O)] = rng();
+    winnerValues_[static_cast<int>(Board::Cell::X)]       = rng();
+    winnerValues_[static_cast<int>(Board::Cell::O)]       = rng();
 }
