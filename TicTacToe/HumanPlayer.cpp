@@ -18,13 +18,13 @@ void HumanPlayer::move(TicTacToeState * pState)
 {
     // Determine the player's symbol
     char playerSymbol = (TicTacToeState::toCell(playerId_) == Board::Cell::X) ? 'X' : 'O';
-    
+
     // Get valid move from user
     int row, col;
     while (true)
     {
         std::cout << "Enter your move (row col), where row and col are 0-2: ";
-        
+
         // Read input
         if (!(std::cin >> row >> col))
         {
@@ -33,7 +33,7 @@ void HumanPlayer::move(TicTacToeState * pState)
             clearInputStream();
             continue;
         }
-        
+
         // Validate move
         if (isValidMove(*pState, row, col))
         {
@@ -52,7 +52,7 @@ void HumanPlayer::move(TicTacToeState * pState)
             }
         }
     }
-    
+
     // Apply the move to the game state
     pState->move(row, col);
 }
@@ -64,7 +64,7 @@ bool HumanPlayer::isValidMove(TicTacToeState const & state, int row, int col) co
     {
         return false;
     }
-    
+
     // Check if the cell is empty
     return state.board().at(row, col) == Board::Cell::NEITHER;
 }

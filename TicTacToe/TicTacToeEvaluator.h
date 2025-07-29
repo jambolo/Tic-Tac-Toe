@@ -23,9 +23,9 @@ public:
 
 private:
     // Value constants for evaluation
-    static float constexpr X_WIN_VALUE = 10000.0f;
-    static float constexpr O_WIN_VALUE = -10000.0f;
-    static float constexpr CENTER_BONUS = 5.0f;
-    static float constexpr CORNER_BONUS = 1.0f;
+    static float constexpr X_WIN_VALUE       = 10000.0f;
+    static float constexpr O_WIN_VALUE       = -10000.0f;
+    static float constexpr CENTER_BONUS      = 5.0f;
+    static float constexpr CORNER_BONUS      = 1.0f;
     static float constexpr TWO_IN_LINE_BONUS = 100.0f;
 };

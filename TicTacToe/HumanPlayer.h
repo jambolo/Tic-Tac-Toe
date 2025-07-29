@@ -12,12 +12,9 @@ public:
     virtual void move(TicTacToeState * pState) override;
 
 private:
-    // Display the current board state in a user-friendly format
-    void displayBoard(TicTacToeState const & state) const;
-    
     // Validate if a move is legal
     bool isValidMove(TicTacToeState const & state, int row, int col) const;
-    
+
     // Clear the input stream after invalid input
     void clearInputStream() const;
 };

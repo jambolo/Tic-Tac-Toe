@@ -1,9 +1,8 @@
 #pragma once
 
-#include <cstdint>
 #include <array>
+#include <cstdint>
 #include <utility>
-
 
 class Board
 {
@@ -12,11 +11,11 @@ public:
     enum class Cell : uint8_t
     {
         NEITHER = 0,
-        X = 1,
-        O = 2
+        X       = 1,
+        O       = 2
     };
 
-    Board(std::array<Cell, 9> const& board = {})
+    Board(std::array<Cell, 9> const & board = {})
         : board_(board)
     {
     }
@@ -44,5 +43,3 @@ public:
 private:
     std::array<Cell, 9> board_; // 3x3 board stored in row-major order
 };
-
-

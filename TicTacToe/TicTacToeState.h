@@ -7,8 +7,8 @@
 
 #include <array>
 #include <cstdint>
-#include <optional>
 #include <memory>
+#include <optional>
 #include <utility>
 #include <vector>
 
@@ -17,6 +17,13 @@
 class TicTacToeState : public GamePlayer::GameState
 {
 public:
+    struct Move
+    {
+        Board::Cell cell;
+        int row;
+        int column;
+    };
+
     // Default constructor - creates empty board with first player to move
     TicTacToeState();
 
@@ -33,29 +40,32 @@ public:
     virtual uint64_t fingerprint() const override;
 
     // Returns the player whose turn it is. Overrides GameState::whoseTurn().
-    virtual PlayerId whoseTurn() const override { return currentPlayer_; };
+    virtual PlayerId whoseTurn() const override { return currentPlayer_; }
 
-    // Check if the game is over (win or draw)
+    // Returns true if the game is over (win or draw)
     bool isDone() const { return done_; }
 
-    // Check if the game is a draw
+    // Returns true if the game is a draw
     bool isDraw() const { return done_ && winner_ == Board::Cell::NEITHER; }
 
     // Returns the winner
     Board::Cell winner() const { return winner_; }
 
-    // Get the board as a const reference
+    // Returns the board
     Board const & board() const { return board_; }
 
-    // Convert PlayerId to Board::Cell
+    // Returns the last move made by the current player
+    Move const & lastMove() const { return lastMove_; }
+
+    // Converts PlayerId to Board::Cell
     static Board::Cell toCell(PlayerId player) { return (player == PlayerId::FIRST) ? Board::Cell::X : Board::Cell::O; }
 
-    // Convert Cell to PlayerId
+    // Converts Cell to PlayerId
     static std::optional<PlayerId> toPlayerId(Board::Cell cell)
     {
         return (cell == Board::Cell::NEITHER) ? std::optional<PlayerId>() :
-            (cell == Board::Cell::X) ? std::optional<PlayerId>(PlayerId::FIRST) :
-            std::optional<PlayerId>(PlayerId::SECOND);
+               (cell == Board::Cell::X) ? std::optional<PlayerId>(PlayerId::FIRST) :
+               std::optional<PlayerId>(PlayerId::SECOND);
     }
 
 private:
@@ -64,6 +74,7 @@ private:
     bool done_;                 // Indicates if the game is done
     Board::Cell winner_;        // Cell value of the winner (NEITHER means still playing or done with a draw)
     ZHash zhash_;               // Zobrist hash for the board state
+    Move lastMove_;             // The last move made by the current player
 
     void checkIfDone(); // Determine the game status after a move
 };

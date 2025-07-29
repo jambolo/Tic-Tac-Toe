@@ -3,32 +3,34 @@
 #include "Board.h"
 #include "ZHash.h"
 
-#include <array>
 #include <algorithm>
+#include <array>
 #include <cassert>
 
 typedef std::array<int, 3> Line;
 typedef std::vector<Line> LineList;
 typedef std::array<LineList, 9> LineListArray;
 
- // Lines for each cell in the tic-tac-toe board}
-static LineListArray linesFrom{{
-   LineList{{{0, 1, 2}, {0, 4, 8}, {0, 3, 6}}},             // 0
-   LineList{{{0, 1, 2}, {1, 4, 7}}},                        // 1
-   LineList{{{0, 1, 2}, {2, 4, 6}, {2, 5, 8}}},             // 2
-   LineList{{{3, 4, 5}, {0, 3, 6}}},                        // 3
-   LineList{{{3, 4, 5}, {0, 4, 8}, {1, 4, 7}, {2, 4, 6}}},  // 4
-   LineList{{{3, 4, 5}, {2, 5, 8}}},                        // 5
-   LineList{{{6, 7, 8}, {0, 3, 6}, {2, 4, 6}}},             // 6
-   LineList{{{6, 7, 8}, {1, 4, 7}}},                        // 7
-   LineList{{{6, 7, 8}, {0, 4, 8}, {2, 5, 8}}},             // 8
-}};
+// Lines for each cell in the tic-tac-toe board}
+static LineListArray linesFrom{ {
+    LineList{ { { 0, 1, 2 }, { 0, 4, 8 }, { 0, 3, 6 } } },  // 0
+    LineList{ { { 0, 1, 2 }, { 1, 4, 7 } } },               // 1
+    LineList{ { { 0, 1, 2 }, { 2, 4, 6 }, { 2, 5, 8 } } },  // 2
+    LineList{ { { 3, 4, 5 }, { 0, 3, 6 } } },               // 3
+    LineList{ { { 3, 4, 5 }, { 0, 4, 8 }, { 1, 4, 7 }, { 2, 4, 6 } } }, // 4
+    LineList{ { { 3, 4, 5 }, { 2, 5, 8 } } },               // 5
+    LineList{ { { 6, 7, 8 }, { 0, 3, 6 }, { 2, 4, 6 } } },  // 6
+    LineList{ { { 6, 7, 8 }, { 1, 4, 7 } } },               // 7
+    LineList{ { { 6, 7, 8 }, { 0, 4, 8 }, { 2, 5, 8 } } },  // 8
+} };
 
 TicTacToeState::TicTacToeState()
     : board_()
     , currentPlayer_(PlayerId::FIRST)
     , done_(false)
     , winner_(Board::Cell::NEITHER)
+    , zhash_()
+    , lastMove_{Board::Cell::NEITHER, -1, -1}
 {
 }
 
@@ -38,6 +40,7 @@ TicTacToeState::TicTacToeState(Board const & board, PlayerId currentPlayer)
     , done_(false)
     , winner_(Board::Cell::NEITHER)
     , zhash_(board, currentPlayer)
+    , lastMove_{Board::Cell::NEITHER, -1, -1}
 {
     // Initialize done_ and winner_ based on the board state, and update the hash accordingly
     checkIfDone();
@@ -60,6 +63,7 @@ void TicTacToeState::move(int row, int column)
     // Set the cell for the current player
     Board::Cell xo = toCell(currentPlayer_);
     board_.set(row, column, xo);
+    lastMove_ = { xo, row, column };
     zhash_.move(xo, Board::toIndex(row, column));
 
     // Check for win or draw
@@ -90,7 +94,7 @@ void TicTacToeState::checkIfDone()
                 board_.at(line[0]) == board_.at(line[1]) &&
                 board_.at(line[1]) == board_.at(line[2]))
             {
-                done_ = true;
+                done_   = true;
                 winner_ = board_.at(line[0]);
                 zhash_.done(winner_);
                 return;
