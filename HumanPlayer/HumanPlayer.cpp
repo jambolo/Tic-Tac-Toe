@@ -1,15 +1,13 @@
 #include "HumanPlayer.h"
-#include "HumanPlayer.h"
-#include "HumanPlayer.h"
 
-#include "Board.h"
-#include "TicTacToeState.h"
+#include "Components/Board.h"
+#include "TicTacToeState/TicTacToeState.h"
 
 #include <iostream>
 #include <limits>
 #include <string>
 
-HumanPlayer::HumanPlayer(GamePlayer::GameState::PlayerId playerId)
+HumanPlayer::HumanPlayer(TicTacToeState::PlayerId playerId)
     : Player(playerId)
 {
 }
@@ -20,7 +18,7 @@ void HumanPlayer::move(TicTacToeState * pState)
     char playerSymbol = (TicTacToeState::toCell(playerId_) == Board::Cell::X) ? 'X' : 'O';
 
     // Get valid move from user
-    int row, col;
+    int  row, col;
     while (true)
     {
         std::cout << "Enter your move (row col), where row and col are 0-2: ";

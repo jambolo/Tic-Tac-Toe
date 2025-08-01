@@ -1,9 +1,8 @@
 #pragma once
 
-#include "Board.h"
-#include "ZHash.h"
-
+#include "Components/Board.h"
 #include "GamePlayer/GameState.h"
+#include "ZHash.h"
 
 #include <array>
 #include <cstdint>
@@ -17,11 +16,12 @@
 class TicTacToeState : public GamePlayer::GameState
 {
 public:
+    using PlayerId = GamePlayer::GameState::PlayerId;
     struct Move
     {
         Board::Cell cell;
-        int row;
-        int column;
+        int         row;
+        int         column;
     };
 
     // Default constructor - creates empty board with first player to move
@@ -69,12 +69,12 @@ public:
     }
 
 private:
-    Board board_;               // Board stored in row-major order
-    PlayerId currentPlayer_;    // Current player to move
-    bool done_;                 // Indicates if the game is done
+    Board       board_;         // Board stored in row-major order
+    PlayerId    currentPlayer_; // Current player to move
+    bool        done_;          // Indicates if the game is done
     Board::Cell winner_;        // Cell value of the winner (NEITHER means still playing or done with a draw)
-    ZHash zhash_;               // Zobrist hash for the board state
-    Move lastMove_;             // The last move made by the current player
+    ZHash       zhash_;         // Zobrist hash for the board state
+    Move        lastMove_;      // The last move made by the current player
 
-    void checkIfDone(); // Determine the game status after a move
+    void checkIfDone();         // Determine the game status after a move
 };

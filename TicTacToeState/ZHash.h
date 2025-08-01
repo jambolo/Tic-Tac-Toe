@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Board.h"
+#include "Components/Board.h"
 #include "GamePlayer/GameState.h"
+
 #include <cstdint>
 
 // Zobrist Hashing Calculator.
@@ -39,7 +40,7 @@ public:
     // Constructor
     ZHash(Board const &                   board,
           GamePlayer::GameState::PlayerId currentPlayer,
-          bool                            done   = false,
+          bool                            done = false,
           Board::Cell                     winner = Board::Cell::NEITHER);
 
     // Returns the current value.
@@ -62,9 +63,9 @@ private:
     friend bool operator ==(ZHash const & x, ZHash const & y);
     friend bool operator <(ZHash const & x, ZHash const & y);
 
-    class ZValueTable; // declared below
+    class ZValueTable;                     // declared below
 
-    Z value_; // The hash value
+    Z value_;                              // The hash value
 
     static ZValueTable const zValueTable_; // The hash values for each incremental state change
 };
@@ -88,9 +89,9 @@ public:
     ZValueTable();
 
     Z cellValue(Board::Cell cell, int row, int column) const { return cellValue(cell, Board::toIndex(row, column)); }
-    Z cellValue(Board::Cell cell, int index) const           { return cellValues_[index][static_cast<int>(cell)]; }
-    Z turnValue() const                                      { return turnValue_; }
-    Z winnerValue(Board::Cell winner) const                  { return winnerValues_[static_cast<int>(winner)]; }
+    Z cellValue(Board::Cell cell, int index) const { return cellValues_[index][static_cast<int>(cell)]; }
+    Z turnValue() const { return turnValue_; }
+    Z winnerValue(Board::Cell winner) const { return winnerValues_[static_cast<int>(winner)]; }
 
 private:
 

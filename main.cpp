@@ -1,6 +1,6 @@
-#include "TicTacToe/TicTacToeState.h"
-#include "TicTacToe/HumanPlayer.h"
-#include "TicTacToe/ComputerPlayer.h"
+#include "TicTacToeState/TicTacToeState.h"
+#include "HumanPlayer/HumanPlayer.h"
+#include "ComputerPlayer/ComputerPlayer.h"
 
 #include <CLI/CLI.hpp>
 
@@ -11,16 +11,16 @@ using namespace GamePlayer;
 
 static void displayBoard(TicTacToeState const & state);
 
-int main(int argc, char* argv[])
+int main(int argc, char * argv[])
 {
     bool humanGoesFirst = true;     // Human player goes first by default
 
     {
         CLI::App cli;
-        bool first = false;
-        bool second = false;
+        bool     first  = false;
+        bool     second = false;
 
-        auto * order = cli.add_option_group("Order of play", "Choose who goes first");
+        auto *   order  = cli.add_option_group("Order of play", "Choose who goes first");
         order->add_flag("--first, -f", first, "You go first. (default)");
         order->add_flag("--second, -s", second, "The computer goes first.");
         order->require_option(0, 1);
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
     }
 
     TicTacToeState state;
-    HumanPlayer human(humanGoesFirst? GameState::PlayerId::FIRST : GameState::PlayerId::SECOND);
+    HumanPlayer    human(humanGoesFirst ? GameState::PlayerId::FIRST : GameState::PlayerId::SECOND);
     ComputerPlayer computer(humanGoesFirst ? GameState::PlayerId::SECOND : GameState::PlayerId::FIRST);
 
     while (!state.isDone())
@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
     }
     else
     {
-        GamePlayer::GameState::PlayerId winner = TicTacToeState::toPlayerId(state.winner()).value();
+        TicTacToeState::PlayerId winner = TicTacToeState::toPlayerId(state.winner()).value();
         if (winner == human.playerId())
             std::cout << "You win!" << std::endl;
         else
@@ -77,8 +77,7 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-
-static void displayBoard(TicTacToeState const& state)
+static void displayBoard(TicTacToeState const & state)
 {
     std::cout << "   0   1   2\n";
     for (int row = 0; row < 3; ++row)
@@ -86,8 +85,8 @@ static void displayBoard(TicTacToeState const& state)
         std::cout << row << " ";
         for (int col = 0; col < 3; ++col)
         {
-            Board::Cell cell = state.board().at(row, col);
-            char cellChar = '.';
+            Board::Cell cell     = state.board().at(row, col);
+            char        cellChar = '.';
 
             switch (cell)
             {
@@ -100,10 +99,12 @@ static void displayBoard(TicTacToeState const& state)
             }
 
             std::cout << " " << cellChar << " ";
-            if (col < 2) std::cout << "|";
+            if (col < 2)
+                std::cout << "|";
         }
         std::cout << "\n";
-        if (row < 2) std::cout << "  ---|---|---\n";
+        if (row < 2)
+            std::cout << "  ---|---|---\n";
     }
     std::cout << "\n";
 }

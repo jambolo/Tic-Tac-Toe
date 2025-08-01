@@ -2,6 +2,11 @@
 
 #include "GamePlayer/StaticEvaluator.h"
 
+namespace GamePlayer
+{
+class GameState;
+}
+
 // A static evaluation function for tic-tac-toe.
 class TicTacToeEvaluator : public GamePlayer::StaticEvaluator
 {

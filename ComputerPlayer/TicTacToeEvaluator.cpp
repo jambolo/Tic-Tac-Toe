@@ -1,8 +1,6 @@
 #include "TicTacToeEvaluator.h"
 
-#include "TicTacToeState.h"
-
-#include "GamePlayer/GameState.h"
+#include "TicTacToeState/TicTacToeState.h"
 
 #include <array>
 #include <cassert>
@@ -19,9 +17,9 @@ static Line allLines[] {
 float TicTacToeEvaluator::evaluate(GamePlayer::GameState const & state) const
 {
     // Check if the state is a TicTacToeState
-    auto const & tttState = dynamic_cast<TicTacToeState const &>(state);
+    auto const &  tttState = dynamic_cast<TicTacToeState const &>(state);
 
-    Board const & board = tttState.board();
+    Board const & board    = tttState.board();
 
     // If there are 3 Xs in a row, return the X win value
     for (auto const & line : allLines)
@@ -58,9 +56,9 @@ float TicTacToeEvaluator::evaluate(GamePlayer::GameState const & state) const
         {
             switch (board.at(idx))
             {
-                case Board::Cell::X: ++xCount; break;
-                case Board::Cell::O: ++oCount; break;
-                case Board::Cell::NEITHER: ++emptyCount; break;
+            case Board::Cell::X: ++xCount; break;
+            case Board::Cell::O: ++oCount; break;
+            case Board::Cell::NEITHER: ++emptyCount; break;
             }
         }
         if (xCount == 2 && emptyCount == 1)

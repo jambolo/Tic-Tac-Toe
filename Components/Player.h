@@ -1,12 +1,12 @@
 #pragma once
 
-#include "TicTacToeState.h"
+#include "TicTacToeState/TicTacToeState.h"
 
 // Abstract base class for players in a tic-tac-toe game.
 class Player
 {
 public:
-    explicit Player(GamePlayer::GameState::PlayerId playerId)
+    explicit Player(TicTacToeState::PlayerId playerId)
         : playerId_(playerId)
     {
     }
@@ -17,8 +17,8 @@ public:
     virtual void move(TicTacToeState * pState) = 0;
 
     // Get the player's ID.
-    GamePlayer::GameState::PlayerId playerId() const { return playerId_; }
+    TicTacToeState::PlayerId playerId() const { return playerId_; }
 
 protected:
-    GamePlayer::GameState::PlayerId playerId_;    // The player's ID
+    TicTacToeState::PlayerId playerId_;    // The player's ID
 };

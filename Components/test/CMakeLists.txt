@@ -25,7 +25,7 @@ function(add_test test_name source_file)
 
     target_link_libraries(${test_name} 
         PRIVATE 
-            TicTacToe::TicTacToe
+            ${PROJECT_NAME}::${PROJECT_NAME}
             GTest::gtest
             GTest::gtest_main
     )
@@ -33,18 +33,11 @@ function(add_test test_name source_file)
     message(STATUS "Added test executable: ${test_name}")
 endfunction()
 
-set(SOURCES
-    test-Board.cpp
-    test-ComputerPlayer.cpp
-    test-HumanPlayer.cpp
-    test-TicTacToeEvaluator.cpp
-    test-TicTacToeState.cpp
-    test-ZHash.cpp
-)
+file(GLOB SOURCES "*.cpp")
 
-message(STATUS "Building tests for TicTacToe")
+message(STATUS "Building tests for ${PROJECT_NAME}")
 
 foreach(FILE ${SOURCES})
     get_filename_component(TEST ${FILE} NAME_WE)
-    add_test("TicTacToe_${TEST}" ${FILE})
+    add_test("${PROJECT_NAME}_${TEST}" ${FILE})
 endforeach()

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(TicTacToe LANGUAGES CXX)
+project(TicTacToeState LANGUAGES CXX)
 
 # Use modern CMake policies
 cmake_policy(SET CMP0077 NEW)  # option() honors normal variables
@@ -12,26 +12,16 @@ cmake_policy(SET CMP0074 NEW)  # find_package uses <PackageName>_ROOT variables
 add_library(${PROJECT_NAME})
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
-target_sources(TicTacToe
+target_sources(${PROJECT_NAME}
     PRIVATE
-        Board.cpp
-        ComputerPlayer.cpp
-        HumanPlayer.cpp
-        TicTacToeEvaluator.cpp
         TicTacToeState.cpp
         ZHash.cpp
     PUBLIC
         FILE_SET HEADERS
         BASE_DIRS ${CMAKE_SOURCE_DIR}
         FILES
-            Board.h
-            ComputerPlayer.h
-            HumanPlayer.h
-            Player.h
-            TicTacToeEvaluator.h
             TicTacToeState.h
 )
-
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 17
@@ -62,8 +52,8 @@ target_include_directories(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} 
     PUBLIC
+        Components::Components
         GamePlayer::GamePlayer
-        nlohmann_json::nlohmann_json
 )
 
 # Organize source files for IDEs

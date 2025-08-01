@@ -48,8 +48,12 @@ add_executable(tictactoe ${SOURCES})
 target_include_directories(tictactoe PRIVATE . GamePlayer/include)
 
 target_link_libraries(tictactoe PRIVATE
+    Components
+    ComputerPlayer
     GamePlayer
-    TicTacToe
+    HumanPlayer
+    TicTacToeState
+
     CLI11::CLI11
     nlohmann_json::nlohmann_json
 )
@@ -72,6 +76,9 @@ endif()
 #########################################################################
 # Libraries                                                             #
 #########################################################################
+add_subdirectory(Components)
+add_subdirectory(ComputerPlayer)
 add_subdirectory(GamePlayer)
-add_subdirectory(TicTacToe)
+add_subdirectory(HumanPlayer)
+add_subdirectory(TicTacToeState)
 

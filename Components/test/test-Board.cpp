@@ -1,38 +1,37 @@
 #include "gtest/gtest.h"
 
-#include "TicTacToe/Board.h"
+#include "Components/Board.h"
 
 #include <algorithm>
 
 namespace TicTacToe
 {
-
 TEST(Board, Constructor)
 {
     // Nothing to test here, just make sure the constructor executes without error
     ASSERT_NO_THROW(Board());
     ASSERT_NO_THROW(
-        Board({ {
-            Board::Cell::X,       Board::Cell::X, Board::Cell::NEITHER,
-            Board::Cell::X,       Board::Cell::X, Board::Cell::NEITHER,
-            Board::Cell::NEITHER, Board::Cell::O, Board::Cell::O
-        } })
+        Board({{
+                  Board::Cell::X,       Board::Cell::X, Board::Cell::NEITHER,
+                  Board::Cell::X,       Board::Cell::X, Board::Cell::NEITHER,
+                  Board::Cell::NEITHER, Board::Cell::O, Board::Cell::O
+              }})
     );
 }
 
 TEST(Board, value)
 {
     std::array<Board::Cell, 9> boardData = {
-        Board::Cell::X,       Board::Cell::NEITHER, Board::Cell::NEITHER, 
-        Board::Cell::X,       Board::Cell::NEITHER, Board::Cell::O,       
+        Board::Cell::X,       Board::Cell::NEITHER, Board::Cell::NEITHER,
+        Board::Cell::X,       Board::Cell::NEITHER, Board::Cell::O,
         Board::Cell::NEITHER, Board::Cell::X,       Board::Cell::O
     };
 
     // Test each cell three times cycling though each possible value
     for (int i = 0; i < 3; ++i)
     {
-        std::for_each(boardData.begin(), boardData.end(), [](Board::Cell& x) {
-            x = static_cast<Board::Cell>((static_cast<int>(x) + 1) % 3);
+        std::for_each(boardData.begin(), boardData.end(), [] (Board::Cell & x){
+                x = static_cast<Board::Cell>((static_cast<int>(x) + 1) % 3);
             });
 
         Board board(boardData);
@@ -51,8 +50,8 @@ TEST(Board, At_row_column)
     // Test each cell three times cycling though each possible value
     for (int i = 0; i < 3; ++i)
     {
-        std::for_each(boardData.begin(), boardData.end(), [](Board::Cell & x) {
-            x = static_cast<Board::Cell>((static_cast<int>(x) + 1) % 3);
+        std::for_each(boardData.begin(), boardData.end(), [] (Board::Cell & x){
+                x = static_cast<Board::Cell>((static_cast<int>(x) + 1) % 3);
             });
 
         Board board(boardData);
@@ -77,8 +76,8 @@ TEST(Board, At_index)
     // Test each cell three times cycling though each possible value
     for (int i = 0; i < 3; ++i)
     {
-        std::for_each(boardData.begin(), boardData.end(), [](Board::Cell& x) {
-            x = static_cast<Board::Cell>((static_cast<int>(x) + 1) % 3);
+        std::for_each(boardData.begin(), boardData.end(), [] (Board::Cell & x){
+                x = static_cast<Board::Cell>((static_cast<int>(x) + 1) % 3);
             });
 
         Board board(boardData);
@@ -101,8 +100,8 @@ TEST(Board, Set_row_column)
     Board board;
     for (int i = 0; i < 3; ++i)
     {
-        std::for_each(boardData.begin(), boardData.end(), [](Board::Cell& x) {
-            x = static_cast<Board::Cell>((static_cast<int>(x) + 1) % 3);
+        std::for_each(boardData.begin(), boardData.end(), [] (Board::Cell & x){
+                x = static_cast<Board::Cell>((static_cast<int>(x) + 1) % 3);
             });
 
         for (int r = 0; r < 3; ++r)
@@ -129,8 +128,8 @@ TEST(Board, Set_index)
     Board board;
     for (int i = 0; i < 3; ++i)
     {
-        std::for_each(boardData.begin(), boardData.end(), [](Board::Cell& x) {
-            x = static_cast<Board::Cell>((static_cast<int>(x) + 1) % 3);
+        std::for_each(boardData.begin(), boardData.end(), [] (Board::Cell & x){
+                x = static_cast<Board::Cell>((static_cast<int>(x) + 1) % 3);
             });
 
         for (int i = 0; i < 9; ++i)
@@ -162,5 +161,4 @@ TEST(Board, ToPosition)
         EXPECT_EQ(c, i % 3);
     }
 }
-
 } // namespace TicTacToe

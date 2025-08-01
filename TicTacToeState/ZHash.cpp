@@ -1,7 +1,6 @@
 #include "ZHash.h"
 
-#include "Board.h"
-
+#include "Components/Board.h"
 #include "GamePlayer/GameState.h"
 
 #include <cassert>
@@ -50,7 +49,7 @@ ZHash & ZHash::done(Board::Cell winner)
 ZHash::ZValueTable::ZValueTable()
 {
     std::mt19937_64 rng;
-    static_assert(sizeof(std::mt19937_64::result_type) == 8, "The random number generator must generate 64 bits.");
+    static_assert(sizeof (std::mt19937_64::result_type) == 8, "The random number generator must generate 64 bits.");
     // Note: We don't seed the generator. This means that the same values are generated each time the program is run.
 
     // Generate cell values

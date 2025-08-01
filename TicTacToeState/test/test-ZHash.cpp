@@ -1,13 +1,13 @@
 #include "gtest/gtest.h"
 
-#include "TicTacToe/ZHash.h"
+#include "TicTacToeState/TicTacToeState.h"
+#include "TicTacToeState/ZHash.h"
 
 namespace TicTacToe
 {
-
 TEST(ZHash, Z)
 {
-    EXPECT_EQ(sizeof(ZHash::Z), 8);
+    EXPECT_EQ(sizeof (ZHash::Z), 8);
 }
 
 TEST(ZHash, EMPTY)
@@ -35,28 +35,28 @@ TEST(ZHash, Constructor_z)
 TEST(ZHash, Constructor_board_currentPlayer_done_winner)
 {
     Board board0;
-    ASSERT_NO_THROW(ZHash(board0, GamePlayer::GameState::PlayerId::FIRST, false, Board::Cell::NEITHER));
+    ASSERT_NO_THROW(ZHash(board0, TicTacToeState::PlayerId::FIRST, false, Board::Cell::NEITHER));
 
-    ZHash z0(board0, GamePlayer::GameState::PlayerId::FIRST, false, Board::Cell::NEITHER);
+    ZHash z0(board0, TicTacToeState::PlayerId::FIRST, false, Board::Cell::NEITHER);
     EXPECT_EQ(z0.value(), ZHash::EMPTY);
 
-    ZHash z1(board0, GamePlayer::GameState::PlayerId::SECOND, false, Board::Cell::NEITHER);
+    ZHash z1(board0, TicTacToeState::PlayerId::SECOND, false, Board::Cell::NEITHER);
     EXPECT_NE(z1.value(), z0.value());
 
-    ZHash z2(board0, GamePlayer::GameState::PlayerId::FIRST, false, Board::Cell::X);
+    ZHash z2(board0, TicTacToeState::PlayerId::FIRST, false, Board::Cell::X);
     EXPECT_EQ(z2.value(), z0.value()); // winner should be ignored in this case
 
-    ZHash z3(board0, GamePlayer::GameState::PlayerId::FIRST, false, Board::Cell::O);
+    ZHash z3(board0, TicTacToeState::PlayerId::FIRST, false, Board::Cell::O);
     EXPECT_EQ(z3.value(), z0.value()); // winner should be ignored in this case
 
-    ZHash z5(board0, GamePlayer::GameState::PlayerId::FIRST, true, Board::Cell::NEITHER);
+    ZHash z5(board0, TicTacToeState::PlayerId::FIRST, true, Board::Cell::NEITHER);
     EXPECT_NE(z5.value(), z0.value());
 
-    ZHash z6(board0, GamePlayer::GameState::PlayerId::FIRST, true, Board::Cell::X);
+    ZHash z6(board0, TicTacToeState::PlayerId::FIRST, true, Board::Cell::X);
     EXPECT_NE(z6.value(), z0.value());
     EXPECT_NE(z6.value(), z5.value());
 
-    ZHash z7(board0, GamePlayer::GameState::PlayerId::FIRST, true, Board::Cell::O);
+    ZHash z7(board0, TicTacToeState::PlayerId::FIRST, true, Board::Cell::O);
     EXPECT_NE(z7.value(), z0.value());
     EXPECT_NE(z7.value(), z6.value());
     EXPECT_NE(z7.value(), z5.value());
@@ -120,9 +120,9 @@ TEST(ZHash, Turn)
 
 TEST(ZHash, Done)
 {
-    EXPECT_EQ(ZHash().done(Board::Cell::NEITHER), ZHash(Board(), GamePlayer::GameState::PlayerId::FIRST, true, Board::Cell::NEITHER));
-    EXPECT_EQ(ZHash().done(Board::Cell::X), ZHash(Board(), GamePlayer::GameState::PlayerId::FIRST, true, Board::Cell::X));
-    EXPECT_EQ(ZHash().done(Board::Cell::O), ZHash(Board(), GamePlayer::GameState::PlayerId::FIRST, true, Board::Cell::O));
+    EXPECT_EQ(ZHash().done(Board::Cell::NEITHER), ZHash(Board(), TicTacToeState::PlayerId::FIRST, true, Board::Cell::NEITHER));
+    EXPECT_EQ(ZHash().done(Board::Cell::X), ZHash(Board(), TicTacToeState::PlayerId::FIRST, true, Board::Cell::X));
+    EXPECT_EQ(ZHash().done(Board::Cell::O), ZHash(Board(), TicTacToeState::PlayerId::FIRST, true, Board::Cell::O));
 }
 
 TEST(ZHash, IsUndefined)
@@ -131,5 +131,4 @@ TEST(ZHash, IsUndefined)
     EXPECT_FALSE(ZHash(ZHash::EMPTY).isUndefined());
     EXPECT_FALSE(ZHash(1).isUndefined());
 }
-
 } // namespace TicTacToe

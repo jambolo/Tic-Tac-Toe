@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Player.h"
+#include "Components/Player.h"
 
 class HumanPlayer : public Player
 {
 public:
     // Constructor
-    explicit HumanPlayer(GamePlayer::GameState::PlayerId playerId);
+    explicit HumanPlayer(TicTacToeState::PlayerId playerId);
 
     // Gets a move from the human and applies it to the game state. Overrides Player::move().
     virtual void move(TicTacToeState * pState) override;

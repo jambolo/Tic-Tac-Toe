@@ -1,7 +1,9 @@
 #include "TicTacToeState.h"
 
-#include "Board.h"
 #include "ZHash.h"
+
+#include "Components/Board.h"
+#include "GamePlayer/GameState.h"
 
 #include <algorithm>
 #include <array>
@@ -12,17 +14,17 @@ typedef std::vector<Line> LineList;
 typedef std::array<LineList, 9> LineListArray;
 
 // Lines for each cell in the tic-tac-toe board}
-static LineListArray linesFrom{ {
-    LineList{ { { 0, 1, 2 }, { 0, 4, 8 }, { 0, 3, 6 } } },  // 0
-    LineList{ { { 0, 1, 2 }, { 1, 4, 7 } } },               // 1
-    LineList{ { { 0, 1, 2 }, { 2, 4, 6 }, { 2, 5, 8 } } },  // 2
-    LineList{ { { 3, 4, 5 }, { 0, 3, 6 } } },               // 3
-    LineList{ { { 3, 4, 5 }, { 0, 4, 8 }, { 1, 4, 7 }, { 2, 4, 6 } } }, // 4
-    LineList{ { { 3, 4, 5 }, { 2, 5, 8 } } },               // 5
-    LineList{ { { 6, 7, 8 }, { 0, 3, 6 }, { 2, 4, 6 } } },  // 6
-    LineList{ { { 6, 7, 8 }, { 1, 4, 7 } } },               // 7
-    LineList{ { { 6, 7, 8 }, { 0, 4, 8 }, { 2, 5, 8 } } },  // 8
-} };
+static LineListArray linesFrom {{
+    LineList {{{ 0, 1, 2 }, { 0, 4, 8 }, { 0, 3, 6 }}},              // 0
+    LineList {{{ 0, 1, 2 }, { 1, 4, 7 }}},                           // 1
+    LineList {{{ 0, 1, 2 }, { 2, 4, 6 }, { 2, 5, 8 }}},              // 2
+    LineList {{{ 3, 4, 5 }, { 0, 3, 6 }}},                           // 3
+    LineList {{{ 3, 4, 5 }, { 0, 4, 8 }, { 1, 4, 7 }, { 2, 4, 6 }}}, // 4
+    LineList {{{ 3, 4, 5 }, { 2, 5, 8 }}},                           // 5
+    LineList {{{ 6, 7, 8 }, { 0, 3, 6 }, { 2, 4, 6 }}},              // 6
+    LineList {{{ 6, 7, 8 }, { 1, 4, 7 }}},                           // 7
+    LineList {{{ 6, 7, 8 }, { 0, 4, 8 }, { 2, 5, 8 }}},              // 8
+}};
 
 TicTacToeState::TicTacToeState()
     : board_()
