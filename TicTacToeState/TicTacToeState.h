@@ -24,7 +24,7 @@ public:
         int         column;
     };
 
-    // Default constructor - creates empty board with first player to move
+    // Default constructor - creates empty board with Alice to move
     TicTacToeState();
 
     // Constructor with specific board state and current player. The board is assued to be valid.
@@ -58,14 +58,14 @@ public:
     Move const & lastMove() const { return lastMove_; }
 
     // Converts PlayerId to Board::Cell
-    static Board::Cell toCell(PlayerId player) { return (player == PlayerId::FIRST) ? Board::Cell::X : Board::Cell::O; }
+    static Board::Cell toCell(PlayerId player) { return (player == PlayerId::ALICE) ? Board::Cell::X : Board::Cell::O; }
 
     // Converts Cell to PlayerId
     static std::optional<PlayerId> toPlayerId(Board::Cell cell)
     {
-        return (cell == Board::Cell::NEITHER) ? std::optional<PlayerId>() :
-               (cell == Board::Cell::X) ? std::optional<PlayerId>(PlayerId::FIRST) :
-               std::optional<PlayerId>(PlayerId::SECOND);
+        return (cell == Board::Cell::NEITHER) ? std::nullopt :
+               (cell == Board::Cell::X)       ? std::optional<PlayerId>(PlayerId::ALICE) :
+                                                std::optional<PlayerId>(PlayerId::BOB);
     }
 
 private:
@@ -76,5 +76,5 @@ private:
     ZHash       zhash_;         // Zobrist hash for the board state
     Move        lastMove_;      // The last move made by the current player
 
-    void checkIfDone();         // Determine the game status after a move
+    void checkIfDone(); // Determine the game status after a move
 };

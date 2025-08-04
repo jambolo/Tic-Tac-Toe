@@ -7,13 +7,20 @@
 #include "GamePlayer/TranspositionTable.h"
 #include "TicTacToeState/TicTacToeState.h"
 
+#if defined(ANALYSIS_TRANSPOSITION_TABLE)
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
+#endif // defined(ANALYSIS_TRANSPOSITION_TABLE)
+
 #include <cassert>
 #include <ctime>
 #include <functional>
+#include <iostream>
+#include <memory>
 #include <vector>
 
-static const int TOTAL_NUMBER_OF_POSSIBLE_STATES = 362880; // 9! possible states in tic-tac-toe
-static const int MAXIMUM_DEPTH = 8;                        // Maximum depth of the game tree for tic-tac-toe (plies 0 - 8)
+static const int TOTAL_NUMBER_OF_POSSIBLE_STATES = 362880; // 9! possible states in tic-tac-toe (not all valid)
+static const int MAXIMUM_DEPTH                   = 8;      // Maximum depth of the game tree for tic-tac-toe (plies 0 - 8)
 
 ComputerPlayer::ComputerPlayer(TicTacToeState::PlayerId playerId)
     : Player(playerId)
@@ -23,9 +30,11 @@ ComputerPlayer::ComputerPlayer(TicTacToeState::PlayerId playerId)
 {
     staticEvaluator_    = std::make_shared<TicTacToeEvaluator>();
     transpositionTable_ = std::make_shared<GamePlayer::TranspositionTable>(TOTAL_NUMBER_OF_POSSIBLE_STATES, MAXIMUM_DEPTH);
-    gameTree_ = new GamePlayer::GameTree(transpositionTable_,
+    gameTree_           = new GamePlayer::GameTree(transpositionTable_,
                                          staticEvaluator_,
-                                         std::bind(&ComputerPlayer::responseGenerator, this, std::placeholders::_1,
+                                         std::bind(&ComputerPlayer::responseGenerator,
+                                                   this,
+                                                   std::placeholders::_1,
                                                    std::placeholders::_2),
                                          MAXIMUM_DEPTH);
 }
@@ -39,23 +48,27 @@ void ComputerPlayer::move(TicTacToeState * pState)
     }
 
     // Find the best response to the current state
-    auto pCopy     = std::make_shared<TicTacToeState>(*pState);
+    auto pCopy = std::make_shared<TicTacToeState>(*pState);
     gameTree_->findBestResponse(std::static_pointer_cast<GamePlayer::GameState>(pCopy));
     auto pResponse = std::dynamic_pointer_cast<TicTacToeState>(pCopy->response_);
     assert(pResponse);
     *pState = *pResponse;
+#if defined(ANALYSIS_TRANSPOSITION_TABLE)
+    json j = transpositionTable_->analysisData_.toJson();
+    std::cerr << j.dump(4) << std::endl;
+#endif
 }
 
 std::vector<GamePlayer::GameState *> ComputerPlayer::responseGenerator(GamePlayer::GameState const & state, int depth)
 {
     std::vector<GamePlayer::GameState *> responses;
-    TicTacToeState const * pTTTState = dynamic_cast<TicTacToeState const *>(&state);
+    TicTacToeState const *               pTTTState = dynamic_cast<TicTacToeState const *>(&state);
     for (int i = 0; i < 9; ++i)
     {
         if (pTTTState->board().at(i) == Board::Cell::NEITHER)
         {
             TicTacToeState * pResponse = new TicTacToeState(*pTTTState);
-            auto [r, c] = Board::toPosition(i);
+            auto [r, c]                = Board::toPosition(i);
             pResponse->move(r, c);
             responses.push_back(pResponse);
         }

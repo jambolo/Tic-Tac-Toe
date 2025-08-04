@@ -18,7 +18,7 @@ ZHash::ZHash(Board const & board, GamePlayer::GameState::PlayerId currentPlayer,
     }
 
     // Add the current player
-    if (currentPlayer != GamePlayer::GameState::PlayerId::FIRST)
+    if (currentPlayer != GamePlayer::GameState::PlayerId::ALICE)
         turn();
 
     // If the game is over, add the done status and winner

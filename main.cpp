@@ -38,8 +38,8 @@ int main(int argc, char * argv[])
     }
 
     TicTacToeState state;
-    HumanPlayer    human(humanGoesFirst ? GameState::PlayerId::FIRST : GameState::PlayerId::SECOND);
-    ComputerPlayer computer(humanGoesFirst ? GameState::PlayerId::SECOND : GameState::PlayerId::FIRST);
+    HumanPlayer    human(humanGoesFirst ? GameState::PlayerId::ALICE : GameState::PlayerId::BOB);
+    ComputerPlayer computer(humanGoesFirst ? GameState::PlayerId::BOB : GameState::PlayerId::ALICE);
 
     while (!state.isDone())
     {

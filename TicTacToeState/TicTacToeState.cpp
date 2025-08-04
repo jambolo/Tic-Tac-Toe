@@ -28,7 +28,7 @@ static LineListArray linesFrom {{
 
 TicTacToeState::TicTacToeState()
     : board_()
-    , currentPlayer_(PlayerId::FIRST)
+    , currentPlayer_(PlayerId::ALICE)
     , done_(false)
     , winner_(Board::Cell::NEITHER)
     , zhash_()
@@ -72,7 +72,7 @@ void TicTacToeState::move(int row, int column)
     checkIfDone();
 
     // Switch to the next player
-    currentPlayer_ = (currentPlayer_ == PlayerId::FIRST) ? PlayerId::SECOND : PlayerId::FIRST;
+    currentPlayer_ = (currentPlayer_ == PlayerId::ALICE) ? PlayerId::BOB : PlayerId::ALICE;
     zhash_.turn();
 }
 

@@ -28,13 +28,13 @@ float TicTacToeEvaluator::evaluate(GamePlayer::GameState const & state) const
             board.at(line[1]) == Board::Cell::X &&
             board.at(line[2]) == Board::Cell::X)
         {
-            return X_WIN_VALUE;
+            return WIN_VALUE;
         }
         if (board.at(line[0]) == Board::Cell::O &&
             board.at(line[1]) == Board::Cell::O &&
             board.at(line[2]) == Board::Cell::O)
         {
-            return O_WIN_VALUE;
+            return -WIN_VALUE;
         }
     }
 

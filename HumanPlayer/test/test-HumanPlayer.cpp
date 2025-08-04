@@ -7,8 +7,8 @@ namespace TicTacToe
 TEST(HumanPlayer, Constructor)
 {
     // Nothing to test here, just make sure the constructor executes without error
-    ASSERT_NO_THROW(HumanPlayer{ TicTacToeState::PlayerId::FIRST });
-    ASSERT_NO_THROW(HumanPlayer{ TicTacToeState::PlayerId::SECOND });
+    ASSERT_NO_THROW(HumanPlayer{ TicTacToeState::PlayerId::ALICE });
+    ASSERT_NO_THROW(HumanPlayer{ TicTacToeState::PlayerId::BOB });
 }
 
 TEST(HumanPlayer, Move)
