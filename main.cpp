@@ -1,110 +1,90 @@
-#include "TicTacToeState/TicTacToeState.h"
-#include "HumanPlayer/HumanPlayer.h"
+#include "Game.h"
+#include "Window.h"
+
 #include "ComputerPlayer/ComputerPlayer.h"
+#include "TicTacToeState/TicTacToeState.h"
 
 #include <CLI/CLI.hpp>
+
+#define SDL_MAIN_USE_CALLBACKS
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
 
 #include <cassert>
 #include <iostream>
 
 using namespace GamePlayer;
 
-static void displayBoard(TicTacToeState const & state);
+// Global game instance for SDL3 main callbacks
+static std::unique_ptr<Game> g_game;
 
-int main(int argc, char * argv[])
+// Command line option to determine who goes first
+static bool g_humanGoesFirst = true;
+
+// Function to parse command line arguments
+static int parseCommandLine(int argc, char * argv[])
 {
-    bool humanGoesFirst = true;     // Human player goes first by default
+    CLI::App cli;
+    bool     first  = false;
+    bool     second = false;
 
+    auto * order = cli.add_option_group("Order of play", "Choose who goes first");
+    order->add_flag("--first, -f", first, "You go first. (default)");
+    order->add_flag("--second, -s", second, "The computer goes first.");
+    order->require_option(0, 1);
+
+    CLI11_PARSE(cli, argc, argv);
+
+    if (first)
     {
-        CLI::App cli;
-        bool     first  = false;
-        bool     second = false;
-
-        auto *   order  = cli.add_option_group("Order of play", "Choose who goes first");
-        order->add_flag("--first, -f", first, "You go first. (default)");
-        order->add_flag("--second, -s", second, "The computer goes first.");
-        order->require_option(0, 1);
-
-        CLI11_PARSE(cli, argc, argv);
-
-        if (first)
-        {
-            humanGoesFirst = true;
-        }
-        else if (second)
-        {
-            humanGoesFirst = false;
-        }
+        g_humanGoesFirst = true;
     }
-
-    TicTacToeState state;
-    HumanPlayer    human(humanGoesFirst ? GameState::PlayerId::ALICE : GameState::PlayerId::BOB);
-    ComputerPlayer computer(humanGoesFirst ? GameState::PlayerId::BOB : GameState::PlayerId::ALICE);
-
-    while (!state.isDone())
+    else if (second)
     {
-        displayBoard(state);
-
-        if (state.whoseTurn() == computer.playerId())
-        {
-            // Computer player's turn
-            std::cout << "Computer's turn...\n";
-            computer.move(&state);
-        }
-        else
-        {
-            // Human player's turn
-            std::cout << "Your turn...\n";
-            human.move(&state);
-        }
-    }
-
-    displayBoard(state);
-
-    if (state.isDraw())
-    {
-        std::cout << "The game is a draw!" << std::endl;
-    }
-    else
-    {
-        TicTacToeState::PlayerId winner = TicTacToeState::toPlayerId(state.winner()).value();
-        if (winner == human.playerId())
-            std::cout << "You win!" << std::endl;
-        else
-            std::cout << "The computer wins!" << std::endl;
+        g_humanGoesFirst = false;
     }
 
     return 0;
 }
 
-static void displayBoard(TicTacToeState const & state)
+// SDL3 main callback functions
+static SDL_AppResult SDL_AppInit(void ** appstate, int argc, char * argv[])
 {
-    std::cout << "   0   1   2\n";
-    for (int row = 0; row < 3; ++row)
+    parseCommandLine(argc, argv);
+
+    try
     {
-        std::cout << row << " ";
-        for (int col = 0; col < 3; ++col)
-        {
-            Board::Cell cell     = state.board().at(row, col);
-            char        cellChar = '.';
-
-            switch (cell)
-            {
-            case Board::Cell::X:
-                cellChar = 'X';
-                break;
-            case Board::Cell::O:
-                cellChar = 'O';
-                break;
-            }
-
-            std::cout << " " << cellChar << " ";
-            if (col < 2)
-                std::cout << "|";
-        }
-        std::cout << "\n";
-        if (row < 2)
-            std::cout << "  ---|---|---\n";
+        g_game = std::make_unique<Game>(g_humanGoesFirst);
     }
-    std::cout << "\n";
+    catch (const std::exception & e)
+    {
+        std::cerr << "Failed to initialize game: " << e.what() << std::endl;
+        return SDL_APP_FAILURE;
+    }
+    return SDL_APP_CONTINUE;
+}
+
+static SDL_AppResult SDL_AppIterate(void * appstate)
+{
+    if (!g_game)
+    {
+        return SDL_APP_FAILURE;
+    }
+
+    return g_game->iterate();
+}
+
+static SDL_AppResult SDL_AppEvent(void * appstate, SDL_Event * event)
+{
+    if (!g_game)
+    {
+        return SDL_APP_FAILURE;
+    }
+
+    return g_game->handleEvent(event);
+}
+
+static void SDL_AppQuit(void * appstate, SDL_AppResult result)
+{
+    g_game.reset();
 }

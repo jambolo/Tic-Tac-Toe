@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 project(Tic-Tac-Toe 
-    VERSION 1.0.0 
-    LANGUAGES CXX
+    VERSION 1.1.0 
+    LANGUAGES C CXX # C is necessary for SDL3 CMake configuration
 )
 
 # Set C++ standard
@@ -27,6 +27,7 @@ option(BUILD_TESTING "Build tests" ON)
 # External dependencies
 find_package(nlohmann_json REQUIRED)
 find_package(CLI11 REQUIRED)
+find_package(SDL3 REQUIRED)
 
 if(WIN32)
     add_compile_definitions(
@@ -40,7 +41,11 @@ if(WIN32)
 endif()
 
 set(SOURCES
+    Game.cpp
+    Game.h
     main.cpp
+    Window.cpp
+    Window.h
 )
 
 # Create the main executable
@@ -51,11 +56,11 @@ target_link_libraries(tictactoe PRIVATE
     Components
     ComputerPlayer
     GamePlayer
-    HumanPlayer
     TicTacToeState
 
     CLI11::CLI11
     nlohmann_json::nlohmann_json
+    SDL3::SDL3
 )
 
 # Source grouping for IDEs
@@ -79,6 +84,5 @@ endif()
 add_subdirectory(Components)
 add_subdirectory(ComputerPlayer)
 add_subdirectory(GamePlayer)
-add_subdirectory(HumanPlayer)
 add_subdirectory(TicTacToeState)
 
